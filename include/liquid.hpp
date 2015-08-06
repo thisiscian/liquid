@@ -5,6 +5,7 @@
 	#include<gif_lib.h>
 	#include<cstdlib>
 	#include<ctime>
+	#include<string>
 
 	namespace liquid {
 
@@ -23,11 +24,16 @@
 			int colour;
 		} Point;
 
-		extern int frames;
-		extern char* output_file;
+		extern int number_of_frames, current_frame;
+		extern int width,height;
+		extern const char* output_file;
+
+		float distance(Point a, Point b);
+		GifByteType* draw();
+
 		void start();
 		void before_update();
-		void update(int frame_number);
+		void update();
 		void after_update();
 		void stop();
 	};

@@ -1,0 +1,5 @@
+.o/*
+bin/*
+gifs/*
+lib/libliquid.a
+.*swp
