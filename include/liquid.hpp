@@ -24,9 +24,12 @@
 			int colour;
 		} Point;
 
+
+		extern GifColorType* global_colour_map;
+	
 		extern int number_of_frames, current_frame;
 		extern int width,height;
-		extern const char* output_file;
+		extern std::string output_file;
 
 		float distance(Point a, Point b);
 		GifByteType* draw();

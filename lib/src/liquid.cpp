@@ -4,20 +4,30 @@
 using std::cout;
 using std::endl;
 
-inline void liquid::start() {};
+std::string liquid::output_file="default.gif";
+int liquid::number_of_frames=10;
+int liquid::height=10;
+int liquid::width=10;
+int liquid::current_frame=0;
+GifColorType* liquid::global_colour_map = new GifColorType[2];
+inline void liquid::start() {
+	liquid::global_colour_map[0].Red=0;
+	liquid::global_colour_map[0].Green=0;
+	liquid::global_colour_map[0].Blue=0;
+	liquid::global_colour_map[1].Red=255;
+	liquid::global_colour_map[1].Green=255;
+	liquid::global_colour_map[1].Blue=255;
+};
 inline void liquid::before_update() {};
 inline void liquid::update() {};
 inline void liquid::after_update() {};
 inline void liquid::stop() {};
-
-int liquid::current_frame=0;
 
 inline float liquid::distance(liquid::Point a, liquid::Point b) {
 	return std::sqrt((a.pos.x-b.pos.x)*(a.pos.x-b.pos.x)+(a.pos.y-b.pos.y)*(a.pos.y-b.pos.y));
 }
 
 inline GifByteType* liquid::draw() {
-	cout << "i'm trying to draw" << endl;
 	int size=liquid::width*liquid::height;
 	GifByteType *image=new GifByteType[size];
 	for(int i=0; i<size; ++i) {
@@ -27,13 +37,14 @@ inline GifByteType* liquid::draw() {
 };
 
 int main(int argc, char* argv[]) {
+	liquid::start();
 	int err;
 	GifByteType graphics_control_extension[4]={0,1,0,0};
-	GifColorType global_colour_map[4] = { 0,0,0, 255, 255, 255, 125, 0, 0, 125, 0 };
 	const char animation_identifier[]="NETSCAPE2.0";
 	GifByteType animation_data[3]={1,0,0};
 
-	ColorMapObject *global_colour_table=GifMakeMapObject(4,global_colour_map);
+	int global_colour_table_size=sizeof(liquid::global_colour_map)/sizeof(GifColorType);
+	ColorMapObject *global_colour_table=GifMakeMapObject(global_colour_table_size,liquid::global_colour_map);
 	ColorMapObject *local_colour_table=GifMakeMapObject(0,NULL);
 
 	std::string full_output_path="gifs/";
@@ -49,7 +60,6 @@ int main(int argc, char* argv[]) {
 	EGifPutExtensionTrailer(gif_file);
 
 	GifByteType *image;
-	liquid::start();
 	for(int i=0; i<liquid::number_of_frames; ++i) {
 		liquid::current_frame=i;
 		// perform updates on data
